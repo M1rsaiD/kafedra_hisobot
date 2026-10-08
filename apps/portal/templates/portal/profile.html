@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Мой профиль" %}{% endblock %}
+{% block content %}
+  <p class="muted"><a href="{% url 'portal:index' %}">← {% translate "Мой кабинет" %}</a></p>
+  <h1>{% translate "Мой профиль" %}</h1>
+  <p class="muted">{% translate "Должность, ставку, тип занятости и степень за период (лист 5) вносит кафедра. Если там ошибка — сообщите заведующему." %}</p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    {% for title, fields in form.sections %}
+      <fieldset><legend>{{ title }}</legend>
+        {% for field in fields %}{% include "portal/_field.html" %}{% endfor %}
+      </fieldset>
+    {% endfor %}
+    <button class="button" type="submit">{% translate "Сохранить" %}</button>
+  </form>
+{% endblock %}

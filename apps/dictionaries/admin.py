@@ -27,6 +27,6 @@ class AcademicTitleAdmin(admin.ModelAdmin):
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ("name", "category")
-    list_filter = ("category",)
+    list_display = ("name", "category", "is_home_country")
+    list_filter = ("category", "is_home_country")
     search_fields = ("name",)

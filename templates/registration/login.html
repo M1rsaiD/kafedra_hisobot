@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Вход" %}{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:420px;margin:40px auto">
+    <h1>{% translate "Вход" %}</h1>
+    <p class="muted">{% translate "Логин и пароль выдаёт заведующий кафедрой." %}</p>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+      <div class="field"><label for="id_username">{% translate "Логин" %}</label>{{ form.username }}</div>
+      <div class="field"><label for="id_password">{% translate "Пароль" %}</label>{{ form.password }}</div>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button class="button" type="submit">{% translate "Войти" %}</button>
+    </form>
+  </div>
+{% endblock %}

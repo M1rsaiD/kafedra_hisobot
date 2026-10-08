@@ -1,11 +1,15 @@
-{% extends "portal/base.html" %}
-{% block title %}{{ title }}{% endblock %}
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ cfg.title }}{% endblock %}
 {% block content %}
-  <h1>{{ title }}</h1>
-  <form method="post" enctype="multipart/form-data">
+  <p class="muted"><a href="{% url 'portal:list' slug %}">← {{ cfg.title }}</a> · {% translate "Лист" %} {{ cfg.sheet }}</p>
+  <h1>{% if object %}{% translate "Изменить запись" %}{% else %}{% translate "Новая запись" %}{% endif %}</h1>
+  {% if cfg.authors %}
+    <div class="card muted">{% translate "Если у работы несколько авторов, укажите их общее число N (включая авторов из других организаций) и отметьте коллег с кафедры. Каждому автору кафедры засчитывается доля 1/N: при двух авторах — по 0.5, при трёх — по 0.33." %}</div>
+  {% endif %}
+  <form method="post" enctype="multipart/form-data" class="card">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="button" type="submit">Сохранить</button>
+    {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    {% for field in form %}{% include "portal/_field.html" %}{% endfor %}
+    <button class="button" type="submit">{% translate "Сохранить" %}</button>
   </form>
-  <p><a href="{% url 'portal:index' %}">← в кабинет</a></p>
 {% endblock %}
