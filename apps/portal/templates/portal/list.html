@@ -1,0 +1,22 @@
+{% extends "portal/base.html" %}
+{% load portal_extras %}
+{% block title %}{{ cfg.title }}{% endblock %}
+{% block content %}
+  <h1>{{ cfg.title }}</h1>
+  <p><a class="button" href="{% url 'portal:add' slug %}">+ Добавить</a></p>
+  <table>
+    <tr>
+      {% for col in cfg.list_columns %}<th>{{ col }}</th>{% endfor %}
+      <th></th>
+    </tr>
+    {% for obj in objects %}
+    <tr>
+      {% for col in cfg.list_columns %}<td>{{ obj|getattr:col }}</td>{% endfor %}
+      <td><a href="{% url 'portal:edit' slug obj.pk %}">изменить</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="{{ cfg.list_columns|length|add:1 }}">Записей пока нет.</td></tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'portal:index' %}">← в кабинет</a></p>
+{% endblock %}
