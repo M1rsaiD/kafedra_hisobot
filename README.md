@@ -17,6 +17,42 @@
 - Интерфейс **на двух языках — узбекском (латиница) и русском**,
   переключатель в шапке; по умолчанию узбекский.
 
+## O‘zbekcha qisqacha
+
+**Kafedra hisoboti** — «Umumiy kafedra reytingi» (2026-yil tahriri, 20 ta varaq)
+shakli bo‘yicha kafedra hisobotini yig‘ish platformasi.
+
+- Har bir o‘qituvchi **shaxsiy kabinetida** (`/kabinet/`) o‘z ma’lumotlarini
+  kiritadi va har bir yozuvga tasdiqlovchi faylni ilova qiladi (diplom,
+  buyruq, maqola PDF, patent, shartnoma, xizmat safari buyrug‘i va h.k.).
+- Kafedra mudiri (`/hisobot/`) kim nimani kiritganini va qaysi fayllar
+  yetishmayotganini ko‘radi hamda **alohida** yuklab oladi:
+  - **Excel** — rasmiy shakl bo‘yicha tayyor hisobot, barcha 20 varaq;
+  - **ZIP** — o‘qituvchilar yuklagan barcha fayllar bo‘limlar bo‘yicha
+    papkalarda va `_fayllar_royxati.xlsx` ro‘yxati (nima bor, nima yo‘q).
+- Maqola va patentlar — **hammualliflar bilan umumiy yozuv**: kafedraning har
+  bir muallifiga **1/N** ulush hisoblanadi (N — mualliflarning umumiy soni):
+  2 muallif — 0.5 dan, 3 muallif — 0.33 dan. Ulushlar 2,1 / 2,4 / 2,5-varaqlarga
+  tushadi.
+- Interfeys **o‘zbek (lotin) va rus tillarida**, sahifa yuqorisida
+  almashtirgich bor; standart til — o‘zbekcha.
+- Hisobot davri «Qoralama» holatida bo‘lganda kiritish ochiq; «Kelishuvga
+  yuborildi» deb belgilangach, o‘qituvchilar yozuvlarni o‘zgartira olmaydi.
+- Qo‘lda to‘ldirilgan Excel faylni `python manage.py import_report ...`
+  buyrug‘i bilan yuklash mumkin (batafsil — quyida, rus tilida).
+
+Ishga tushirish:
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+---
+
 ## Роли
 
 | Кто | Где | Что делает |
