@@ -5,8 +5,8 @@ from .models import Student, Graduate
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "department", "degree_level", "citizenship_country")
-    list_filter = ("department", "degree_level", "citizenship_country__category")
+    list_display = ("full_name", "department", "degree_level", "citizenship_country", "is_active")
+    list_filter = ("department", "degree_level", "is_active", "citizenship_country__category")
     search_fields = ("full_name",)
     autocomplete_fields = ("department", "citizenship_country")
 

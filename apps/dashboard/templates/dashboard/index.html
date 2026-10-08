@@ -1,42 +1,28 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <title>Кафедра — хисобот</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; color: #222; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; }
-    .status-draft { color: #a15c00; }
-    .status-submitted { color: #1a5fb4; }
-    .status-approved { color: #1a7a3c; }
-    a.button { display: inline-block; padding: 6px 12px; background: #1a5fb4; color: #fff;
-               text-decoration: none; border-radius: 6px; font-size: 14px; }
-  </style>
-</head>
-<body>
-  <h1>Отчётные периоды</h1>
-  <p>HR-данные и справочники — через <a href="/admin/">админ-панель Django</a>.
-     Свои публикации, патенты, гранты и файлы преподаватели вносят сами в
-     <a href="/kabinet/">личном кабинете</a>. Здесь — быстрая выгрузка готового
-     .xlsx по уже накопленным данным.</p>
-  <table>
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Отчёты кафедры" %}{% endblock %}
+{% block content %}
+  <h1>{% translate "Отчётные периоды" %}</h1>
+  <p class="muted">{% translate "Преподаватели вносят свои данные и файлы в личном кабинете. Здесь — ход заполнения и выгрузка: Excel-отчёт по форме и отдельно ZIP-архив всех загруженных файлов по разделам. Штатная ведомость, периоды и логины — в админ-панели." %}</p>
+  <div class="table-wrap"><table>
     <thead>
-      <tr><th>Кафедра</th><th>Период</th><th>Дата</th><th>Статус</th><th></th></tr>
+      <tr><th>{% translate "Кафедра" %}</th><th>{% translate "Период" %}</th><th>{% translate "Дата" %}</th><th>{% translate "Статус" %}</th><th></th></tr>
     </thead>
     <tbody>
       {% for period in periods %}
       <tr>
         <td>{{ period.department }}</td>
-        <td>{{ period.period_label }}</td>
-        <td>{{ period.period_date }}</td>
-        <td class="status-{{ period.status }}">{{ period.get_status_display }}</td>
-        <td><a class="button" href="{% url 'dashboard:download_report' period.id %}">Скачать .xlsx</a></td>
+        <td><a href="{% url 'dashboard:progress' period.id %}">{{ period.period_label }}</a></td>
+        <td>{{ period.period_date|date:"d.m.Y" }}</td>
+        <td>{{ period.get_status_display }}</td>
+        <td style="white-space:nowrap">
+          <a class="button secondary" href="{% url 'dashboard:progress' period.id %}">{% translate "Ход заполнения" %}</a>
+          <a class="button" href="{% url 'dashboard:download_report' period.id %}">Excel</a>
+          <a class="button" href="{% url 'dashboard:download_files' period.id %}">{% translate "Файлы (ZIP)" %}</a>
+        </td>
       </tr>
       {% empty %}
-      <tr><td colspan="5">Периоды ещё не созданы — добавьте в админке (Workflow → Отчётные периоды).</td></tr>
+      <tr><td colspan="5">{% translate "Периоды ещё не созданы — добавьте в админ-панели (Отчётные периоды)." %}</td></tr>
       {% endfor %}
     </tbody>
-  </table>
-</body>
-</html>
+  </table></div>
+{% endblock %}

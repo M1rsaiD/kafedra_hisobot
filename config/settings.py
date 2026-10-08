@@ -11,7 +11,8 @@
 - workflow      — отчётные периоды и их статус согласования
 - reports       — все факт-таблицы показателей (публикации, патенты, гранты...)
 - exporter      — генерация исходного .xlsx-отчёта по данным периода
-- dashboard     — минимальный веб-интерфейс поверх admin (список периодов + экспорт)
+- dashboard     — панель заведующего: ход заполнения, выгрузка Excel и ZIP с файлами
+- portal        — личный кабинет преподавателя (/kabinet/)
 """
 
 from pathlib import Path
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -106,7 +108,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = config("LANGUAGE_CODE", default="ru")
+# Интерфейс двуязычный: узбекский (латиница) и русский, переключатель в шапке.
+# Строки в коде написаны по-русски, узбекский перевод — locale/uz/LC_MESSAGES.
+LANGUAGE_CODE = config("LANGUAGE_CODE", default="uz")
+LANGUAGES = [
+    ("uz", "O‘zbekcha"),
+    ("ru", "Русский"),
+]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = config("TIME_ZONE", default="Asia/Tashkent")
 USE_I18N = True
 USE_TZ = True
@@ -124,5 +133,10 @@ EXPORTS_DIR.mkdir(exist_ok=True)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = "/admin/login/"
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"
+
+# Подтверждающие документы могут быть сканами по 10–20 МБ
+DATA_UPLOAD_MAX_MEMORY_SIZE = 30 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024

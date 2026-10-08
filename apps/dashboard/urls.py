@@ -5,6 +5,9 @@ from . import views
 app_name = "dashboard"
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("periods/<int:period_id>/download/", views.download_report, name="download_report"),
+    path("", views.home, name="home"),
+    path("hisobot/", views.index, name="index"),
+    path("hisobot/<int:period_id>/", views.progress, name="progress"),
+    path("hisobot/<int:period_id>/excel/", views.download_report, name="download_report"),
+    path("hisobot/<int:period_id>/fayllar/", views.download_files, name="download_files"),
 ]
